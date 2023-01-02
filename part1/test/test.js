@@ -97,3 +97,81 @@ function functionDeclaration(a, b) {
 const functionExpression = function (a, b) {
     return (a + b)
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////
+//Object Methods
+
+const arto = {
+    name: 'Arto Hellas',
+    age: 35,
+    education: 'PhD',
+    greet: function () {
+        console.log('hello, my name is ' + this.name)
+    },
+    doAddition: function (a, b) {
+        return a + b
+    }
+}
+
+arto.greet()  // "hello, my name is Arto Hellas" gets printed. "this" refers to the object itself. 
+
+//We can also declare functions after the object has been created. 
+
+arto.growOlder = function () {
+    this.age += 1
+}
+
+console.log(arto.age)   // 35 is printed
+arto.growOlder()
+console.log(arto.age)   // 36 is printed
+
+//We can also create references to member functions:
+
+reference = arto.doAddition
+console.log(reference(4, 5))
+
+//However, if we try to do 
+
+reference2 = arto.greet
+reference2() //Hello my name is undefined. 
+
+//"this" is the cause of this issue as it is based on what is calling the method.
+//Here it refers to global this object.
+//There are ways to circumvent this issue, such as binding.
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Classes
+
+//There are features to make simulating object oriented classes possible. 
+//Classes are actually based around the prototype system and are "syntactic sugar"
+
+class Person {
+    constructor(name) {
+        this.name = name
+    }
+
+    getName() {
+        return this.name
+    }
+    //Methods are created on the prototype
+}
+
+bob = new Person("Bob")
+console.log(bob.getName())
+
+//We could achieve the same result by using constructor functions. 
+//Since each object has a prototype, we can manually set the getName as a method of the prototype of "Dog", meaning all instances of Dog
+//Can access the getName function, which closely follows defining the getName method in the dog class as above. 
+
+function Dog(name) {
+    this.name = name
+}
+
+Dog.prototype.getName = function () {
+    return this.name
+}
+
+sparky = new Dog("Sparky")
+console.log(sparky.getName())
