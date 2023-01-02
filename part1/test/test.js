@@ -34,3 +34,66 @@ const m1 = a.map(value => value * 2) //Map creates a new array for which the fun
 const m2 = t.map(value => '<li>' + value + '</li>')
 console.log(m2)
 // [ '<li>1</li>', '<li>2</li>', '<li>3</li>' ] is printed
+
+//We can also destructure an array like the following...
+const g = [1, 2, 3, 4, 5]
+
+const [first, second, ...rest] = t
+
+console.log(first, second)  // 1, 2 is printed
+console.log(rest)          // [3, 4, 5] is printed
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Objects
+//We can define objects in many ways. Object literals are one of the most common. 
+const object1 = {
+    name: 'Arto Hellas',
+    age: 35,
+    education: 'PhD',
+}
+
+const object2 = {
+    name: 'Full Stack web application development',
+    level: 'intermediate studies',
+    size: 5,
+}
+
+const object3 = {
+    name: {
+        first: 'Dan',
+        last: 'Abramov',
+    },
+    grades: [2, 3, 5, 3],
+    department: 'Stanford University',
+}
+
+console.log(object1.age)    //35
+console.log(object1["age"]) //35
+
+//Javascript doesn't have classes in the same sense as other O.O languages but this has been an addition in ES6
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Functions
+const sum = (p1, p2) => {
+    console.log(p1)
+    console.log(p2)
+    return p1 + p2
+}
+
+//We can also have an arrow function with ommitted braces if there is just a single parameter and/or expression. 
+
+const f = p => p * 2
+
+//Other than the arrow syntax, there is function expressions and function declarations. 
+
+//Declaration:
+function functionDeclaration(a, b) {
+    console.log(a, b)
+}
+
+//Expression
+
+const functionExpression = function (a, b) {
+    return (a + b)
+}
