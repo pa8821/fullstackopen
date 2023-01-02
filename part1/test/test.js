@@ -3,15 +3,15 @@
 //Let and const are block scoped ({}), whereas var is function scoped
 
 const x = 1
-let   y = 5
+let y = 5
 
 //Arrays
 //Note that the array can be modified even though t is defined as const. This is due to the fact that only the reference is const (and arrays are mutable)
-const t = [1,2,3,4,5]
+const t = [1, 2, 3, 4, 5]
 t.push(6)
 
 //We can iterate through the array using "forEach":
-t.forEach((value) => {console.log(value)})
+t.forEach((value) => { console.log(value) })
 
 //Here we pass an anonymous function to the forEach method : (value) => {console.log(value)}
 
@@ -27,4 +27,10 @@ console.log(b)
 
 //There are many of useful methods defined for arrays, such as the map method. 
 
-const m1 = a.map(value => value*2) //Map creates a new array for which the function given as a parameter is used to create the items. 
+const m1 = a.map(value => value * 2) //Map creates a new array for which the function given as a parameter is used to create the items.
+
+//Could also transform the map into something completely different
+
+const m2 = t.map(value => '<li>' + value + '</li>')
+console.log(m2)
+// [ '<li>1</li>', '<li>2</li>', '<li>3</li>' ] is printed
