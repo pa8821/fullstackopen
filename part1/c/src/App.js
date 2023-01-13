@@ -134,7 +134,42 @@ import { useState } from 'react'
 
 
 //Event Handling
+//Note that the onClick attribute must be passed a reference to a function. This attribute cannot be defined as a function call. 
+//onClick = {console.log("hello")} will not work, for example. 
 
+
+//Function that returns a function...
+//Even though hello() is a function call, the onClick attribute will take the reference to the handler function. 
+//This allows us to pass arguments to functions we want to execute in the event handler...
+//In this case, the hello function can be thought of as a factory that produces customized event handlers. 
+//It will return () => console.log("hello", "...")
+// const App = () => {
+//   const [value, setValue] = useState(10)
+
+//   const hello = (who) => () => console.log('hello', who)
+  
+//   return (
+//     <div>
+//       {value}
+//       <button onClick={hello("My G")}>button</button>
+//     </div>
+//   )
+// }
+
+
+//Passing event handlers to Child Components
+const App = () => {
+  const [value, setValue] = useState(10)
+  
+  const hello = (who) => () => console.log('hello', who)
+    
+  return (
+    <div>
+      {value}
+      <button onClick={hello("My G")}>button</button>
+    </div>
+  )
+}
 
 
 export default App
