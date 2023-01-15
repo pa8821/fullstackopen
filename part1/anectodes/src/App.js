@@ -18,7 +18,7 @@ const App = () => {
     setSelected(Math.floor((Math.random() * 6)))
     return
   }
-
+  
   const vote = () => {
     const newVotes = [...votes]
     newVotes[selected]++
