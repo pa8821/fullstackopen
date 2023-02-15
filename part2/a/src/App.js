@@ -1,28 +1,53 @@
 import Note from "./components/Note"
-import { useState } from 'react'
+import noteService from "./services/Notes"
+import { useState, useEffect } from 'react'
+
 
 const App = (props) => {
-  const [notes, setNotes] = useState(props.notes)
+  const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState("A new note")
   const [showAll, setShowAll] = useState(true)
+
+  useEffect(() => {
+    noteService
+      .getAll()
+      .then(response => setNotes(response.data))
+  }, [])
+  console.log('render', notes.length, 'notes')
 
   const notesToShow = showAll ? notes : notes.filter(note => note.important)
 
   const addNote = (event) => {
     event.preventDefault()
     const noteToAdd = {
-      id: notes.length + 1, 
       content: newNote, 
-      date: new Date().toISOString(),
       important: true
     }
-    setNotes(notes.concat(noteToAdd))
+    noteService
+      .create(noteToAdd)
+      .then(responseData => {
+        setNotes(notes.concat(responseData))
+      })
   }
 
   const handleNoteChange = (event) => {
     setNewNote(event.target.value)
   }
 
+  const toggleImportanceOf = (id) => {
+    console.log(`importance of ${id} needs to be toggled`)
+    const note = notes.find(note => note.id ===id)
+    const changedNote = {...note, important: !note.important}
+    noteService
+      .update(id ,changedNote)
+      .then(responseData => {
+        //Set notes to new array where we update the note that has come back as response data after being updated. 
+        setNotes(notes.map((note) => note.id !== id ? note : responseData))
+      })
+
+  }
+  
+  //Note that each note receives its own event handler to toggle importance. 
   return (
     <div>
       <h1>Notes</h1>
@@ -33,7 +58,7 @@ const App = (props) => {
       </div>
       <ul>
         {notesToShow.map(note => 
-          <Note key = {note.id} note = {note} />
+          <Note key = {note.id} note = {note} toggleImportance = {() => toggleImportanceOf(note.id)} />
         )}
       </ul>
       <form onSubmit={addNote}>
