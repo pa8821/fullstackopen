@@ -32,12 +32,45 @@ const People = (props) => {
   )
 }
 
+const Notify = ({message}) => {
+  const styleOK = {
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: '20px',
+    borderStyle: 'solid',
+    borderRadius: '5px',
+    padding: '10px',
+    marginBottom: '10px',
+    visibility:'visible',
+  }
+
+  const styleBAD = {...styleOK, color:'red'}
+  let style = styleOK
+
+  if(message===null){
+    return null
+  }
+
+  if(message.includes("ERROR")){
+    style = styleBAD
+  }
+
+  return (
+    <div style={style}>
+      {message}
+    </div>
+  )
+}
+  
+
+
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumb, setNewNumb] = useState('')
   const [filterVal, setFilterVal] = useState("")
+  const [notifyMessage, setNotifyMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -55,16 +88,28 @@ const App = () => {
         const newPerson = {...persons.find(p => p.name === newName), number: newNumb}
         personService
           .changePerson(newPerson.id, {name: newPerson.name, number: newPerson.number})
-          .then(response => setPersons(persons.map(p => p.id !== newPerson.id ? p : response)))
+          .then(response => {
+            setPersons(persons.map(p => p.id !== newPerson.id ? p : response))
+            setNotifyMessage(`Changed ${newName}`)
+          })
+          .catch(error => {
+            setNotifyMessage(`ERROR: Information for ${newName} has been deleted from the server`)
+          })
+        setTimeout(() => setNotifyMessage(null), 2000)
       }
-      else{
+
+      else {
         return
       }
     }
+  
     else{
       personService
         .add({name: newName, number: newNumb})
         .then(response => setPersons(persons.concat(response)))
+
+      setNotifyMessage(`Added ${newName}`)
+      setTimeout(() => setNotifyMessage(null), 2000)
     }
   }
 
@@ -73,14 +118,18 @@ const App = () => {
       personService 
         .deletePerson(id)
         .then(response => setPersons(persons.filter(p => p.id !== id)))
+        .catch(error => {
+          setNotifyMessage(`ERROR: Information for ${newName} has been deleted from the server`)
+        })
     }
   }
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
       <Filter text = {filterVal} eventHandler = {setFilterVal} />
       <h2>Add New</h2>
+      <Notify message = {notifyMessage}/>
       <Form submitPerson = {submitPerson} newName = {newName} newNumb = {newNumb} setNewNumb = {setNewNumb} setNewName = {setNewName}/>
       <h2>Numbers</h2>
       <People deletePerson = {deletePerson} people = {peopleToShow}/>
