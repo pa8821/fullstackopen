@@ -1,25 +1,48 @@
 import logo from './logo.svg';
 import './App.css';
+import {useEffect, useState} from 'react'
+import countriesService from './services/countriesService'
 
-function App() {
+const Countries = (props) => {
+  if(props.countries.length > 10){
+    return null
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ul>
+      {props.countries.map((country)=>{
+        return (
+          <li key = {country.name.common}>{country.name.common}</li>
+        )
+      })}
+    </ul>
+  )
 }
 
-export default App;
+
+const App = () => {
+  const [countries, setCountries] = useState(null)
+  const [filterInput, setFilterInput] = useState("")
+
+  useEffect(() => {
+    countriesService
+      .getAll()
+      .then(response => setCountries(response))
+    }, [])
+
+  if(!countries){
+    return null
+  }
+
+  const filteredCountries = countries.filter(country => country.name.common.includes(filterInput))
+
+  return (
+    <div>
+      find countries <input onChange={(event) => setFilterInput(event.target.value)} value = {filterInput} type="text"></input>
+      <Countries countries = {filteredCountries}/>
+    </div>
+  )
+}
+
+export default App
+
