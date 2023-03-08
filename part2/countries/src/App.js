@@ -2,6 +2,32 @@ import logo from './logo.svg';
 import './App.css';
 import {useEffect, useState} from 'react'
 import countriesService from './services/countriesService'
+import weatherService from './services/weather'
+
+const Weather = ({country}) => {
+  const [weather, setWeather] = useState({temperature:null, wind:null, iconURL:null})
+  const baseIconURL =  "https://openweathermap.org/img/wn"
+
+  useEffect(()=>{
+    weatherService
+      .getWeather(country)
+      .then(response=>{
+        setWeather({temperature: (response.current.temp - 273).toFixed(2), 
+                    wind: response.current.wind_speed, 
+                    iconURL:`${baseIconURL}/${response.current.weather[0].icon}@2x.png`
+                  })
+      })
+  })
+
+  return (
+    <div>
+      <h1>Weather in {country.capital}</h1>
+      <p>temperature: {weather.temperature}C</p>
+      <img src={weather.iconURL}></img>
+      <p>wind speed: {weather.wind}m/s</p>
+    </div>
+  )
+}
 
 const Country = ({country}) => {
   return (
@@ -16,6 +42,7 @@ const Country = ({country}) => {
       <div>
         <img src={country.flags.png}></img>
       </div>
+      <Weather country = {country}/>
     </div>
   )
 }
