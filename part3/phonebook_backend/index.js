@@ -1,7 +1,10 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 const app = express()
 
+app.use(express.static('build'))
+app.use(cors())
 app.use(express.json()) 
 
 morgan.token('body', (req, res) => JSON.stringify(req.body))
@@ -81,6 +84,13 @@ app.post('/api/persons', (request, response) => {
   const person = {...body, 'id':id}
   persons.push(person)
   return response.json(person)
+})
+
+app.put('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const newPerson = {...request.body, id:id}
+  persons = persons.map(p => p.id === id ? newPerson : p)
+  return response.json({...newPerson, id:id})
 })
 
 const PORT = 3001
