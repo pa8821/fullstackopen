@@ -26,7 +26,7 @@ const People = (props) => {
   return ( 
     <div>
         {props.people.map((person) => 
-          <div key = {person.id}>{person.name} {person.number} <button onClick={() => props.deletePerson(person.id)}>Delete</button></div>
+          <div key = {person.id}>{person.Name} {person.Number} <button onClick={() => props.deletePerson(person.id)}>Delete</button></div>
         )}
     </div>
   )
@@ -78,7 +78,7 @@ const App = () => {
       .then(response => setPersons(response))
   }, [])
 
-  const peopleToShow = persons.filter((person) => person.name.includes(filterVal))
+  const peopleToShow = persons ? persons : persons.filter(person => person.name.includes(filterVal))
 
   const submitPerson = (event) => {
     event.preventDefault()

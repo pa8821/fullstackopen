@@ -1,6 +1,8 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./models/person')
 const app = express()
 
 app.use(express.static('build'))
@@ -43,7 +45,9 @@ let persons = [
 ]
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find({}).then(persons => {
+      response.json(persons)
+    })
 })
 
 app.get('/info', (request, response) => {
@@ -74,16 +78,15 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  if(persons.map(p => p.name).includes(body.name)){
-    return response.status(400).json({
-      error: 'name already exists'
-    })
-  }
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+  })
 
-  const id = Math.round(Math.random()*100)
-  const person = {...body, 'id':id}
-  persons.push(person)
-  return response.json(person)
+  person.save().then(savedPerson => {
+    response.json(savedNote)
+  })
+
 })
 
 app.put('/api/persons/:id', (request, response) => {

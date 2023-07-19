@@ -1,5 +1,5 @@
 import Note from "./components/Note"
-import noteService from "./services/Notes"
+import noteService from "./services/noteService"
 import { useState, useEffect } from 'react'
 
 
@@ -11,7 +11,7 @@ const App = (props) => {
   useEffect(() => {
     noteService
       .getAll()
-      .then(response => setNotes(response.data))
+      .then(response => setNotes(response))
   }, [])
   console.log('render', notes.length, 'notes')
 

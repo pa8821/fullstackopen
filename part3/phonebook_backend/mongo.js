@@ -15,12 +15,12 @@ const url =
 mongoose.set('strictQuery',false)
 mongoose.connect(url)
 
-const phoneBookSchema = new mongoose.Schema({
+const personSchema = new mongoose.Schema({
   Name: String,
   Number: String,
 })
 
-const Entry = mongoose.model('PhoneBook', phoneBookSchema)
+const Person = mongoose.model('Person', personSchema)
 
 if (process.argv.length === 3) {
   Entry.find({}).then(result => {
@@ -31,7 +31,7 @@ if (process.argv.length === 3) {
   })
 }
 else {
-  const entry = new Entry({
+  const entry = new Person({
     Name: name, 
     Number: number,
   })
