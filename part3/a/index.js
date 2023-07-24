@@ -21,7 +21,16 @@ app.get('/api/notes', (request, response) => {
 //Route for fetching a single resource. :id functions as a parameter for the /api/notes/ route.
 app.get('/api/notes/:id', (request, response) => {
   Note.findById(request.params.id).then(note => {
-    response.json(note)
+    if (note) {
+      response.json(note)
+    }
+    else {
+      response.status(404).end()
+    }
+  })
+  .catch(error => {
+    console.log(error)
+    response.status(500).end() 
   })
 })
 

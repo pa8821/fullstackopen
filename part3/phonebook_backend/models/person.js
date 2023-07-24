@@ -7,8 +7,17 @@ mongoose.set('strictQuery',false)
 mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
-    Name: String,
-    Number: String,
+    name: {
+      type: String, 
+      minLength: 3,
+      required: true
+    },
+    number: {
+      type: String, 
+      validate: v => {
+        return /\d{2}\-/.test(v);
+      }
+    }
 })
 
 personSchema.set('toJSON', {

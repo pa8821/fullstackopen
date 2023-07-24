@@ -32,8 +32,8 @@ if (process.argv.length === 3) {
 }
 else {
   const entry = new Person({
-    Name: name, 
-    Number: number,
+    name: name, 
+    number: number,
   })
   
   entry.save().then(result => {
